@@ -1,4 +1,4 @@
-(ns cambrian-collections.core
+(ns cambrian-collections.vector
   (:require
     [cambrian-collections.java :as j]))
 
@@ -11,14 +11,14 @@
           "if (RT.isReduced(init)) { return ((IDeref)init).deref(); }"))
       reduce-ops)))
 
-(defn hash-body [fields]
-  (apply str
-    (map
-      (fn [f]
-        (str "hash = (31 * hash) + (" f " == null ? 0 : " f ".hashCode());"))
-      fields)))
+(def max-vector-arity 5)
 
-(def max-vector-arity 6)
+(def class-prelude
+  (->>
+    ["package clojure.lang"
+     "import java.util.Iterator"]
+    (map #(str % ";\n"))
+    (apply str)))
 
 (defn fixed-arity-vector [arity]
   (let [inc-classname (str 'PersistentVector (inc arity))
@@ -28,7 +28,8 @@
                  #(str "e" %)
                  (range arity))]
     (j/class
-      {:implements '[IObj IEditableCollection IReduce]
+      {:modifiers '[public]
+       :implements '[IObj IEditableCollection IReduce]
        :extends 'APersistentVector}
      classname
 
@@ -45,32 +46,39 @@
       (when (zero? arity)
         (str "public final static " classname " EMPTY = new " classname "();"))
 
+      ;; public PersistentVectorN(IPersistentMap meta, ...)
       (apply j/method nil nil classname
-        (concat '[Object meta] (interleave (repeat 'Object) fields))
+        (concat '[IPersistentMap meta] (interleave (repeat 'Object) fields))
         "this.meta = meta;"
         (map
           #(str "this." % " = " % ";")
           fields))
 
-      (apply j/method nil nil classname (interleave (repeat 'Object) fields)
-        "this.meta = nil;"
+      ;; public PersistentVectorN(...)
+      (apply j/method '[public] nil classname (interleave (repeat 'Object) fields)
+        "this.meta = null;"
         (map
           #(str "this." % " = " % ";")
           fields))
 
+      ;; public IPersistentMap meta()
       (j/method '[public] 'IPersistentMap 'meta []
         "return meta;")
+
+      ;; public IObj withMeta(IPersistentMap meta)
+      (j/method '[public] 'IObj 'withMeta '[IPersistentMap meta]
+        "return new " (apply j/invoke classname 'meta fields) ";")
 
       ;; public Object nth(int i)
       (j/method '[public] 'Object 'nth '[int i]
         (if (zero? arity)
-          "throw new IndexOfOutBoundsException();"
+          "throw new IndexOutOfBoundsException();"
           (apply j/switch 'i
             (concat
               (interleave
                 (range)
                 (map #(str "return " % ";\n") fields))
-              ["throw new IndexOfOutBoundsException();\n"]))))
+              ["throw new IndexOutOfBoundsException();\n"]))))
 
       ;; public Object nth(int i, Object notFound
       (j/method '[public] 'Object 'nth '[int i, Object notFound]
@@ -89,7 +97,7 @@
 
       ;; public IPersistentVector empty()
       (j/method '[public] 'IPersistentVector 'empty []
-        "return EMPTY;")
+        "return PersistentVector0.EMPTY;")
 
       ;; public IPersistentVector assocN(int i, Object val)
       (j/method '[public] 'IPersistentVector 'assocN '[int i, Object val]
@@ -111,16 +119,21 @@
       ;; public IPersistentVector cons(Object val)
       (j/method '[public] 'IPersistentVector 'cons '[Object val]
         (if (== max-vector-arity arity)
-          (str "return PersistentVector.EMPTY.asTransient()"
-            (apply str
-              (map
-                (fn [f]
-                  (str ".conj(" f ")"))
-                (conj fields 'val)))
-            ".persistent();")
+          "return (IPersistentVector) asTransient().conj(val).persistent();"
           (str "return new "
             (apply j/invoke inc-classname 'meta (conj fields 'val))
             ";\n")))
+
+      (j/method '[public] 'ITransientCollection 'asTransient []
+        (str
+          "ITransientCollection coll = PersistentVector.EMPTY.asTransient();\n"
+          "return (ITransientVector) coll"
+          (apply str
+            (map
+              (fn [f]
+                (str ".conj(" f ")"))
+              fields))
+          ";"))
 
       ;; public IPersistentVector pop()
       (j/method '[public] 'IPersistentVector 'pop []
@@ -183,7 +196,7 @@
               (fn [f]
                 (str "hash = (31 * hash) + " (j/invoke 'Util.hasheq f) ";"))
               fields))
-          "hash = " (j/invoke 'Mumur3.mixCollHash 'hash arity) ";"
+          "hash = " (j/invoke 'Murmur3.mixCollHash 'hash arity) ";"
           "this.hasheq = hash; }")
         "return hasheq;")
 
