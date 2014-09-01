@@ -182,7 +182,10 @@
                  (range arity))]
     (j/class
       {:modifiers '[static]
-       :implements '[IObj IEditableCollection IReduce]
+       :implements (concat
+                     '[IObj IEditableCollection IReduce]
+                     (when (= 2 arity)
+                       '[IMapEntry]))
        :extends 'APersistentVector}
      classname
 
@@ -195,6 +198,24 @@
 
       "private int hash = -1;"
       "private int hasheq = -1;"
+
+      (when (= 2 arity)
+        (str
+
+          (j/method '[public] 'Object 'key []
+            (j/return (first fields)))
+
+          (j/method '[public] 'Object 'getKey []
+            (j/return (first fields)))
+
+          (j/method '[public] 'Object 'val []
+            (j/return (second fields)))
+
+          (j/method '[public] 'Object 'getValue []
+            (j/return (second fields)))
+
+          (j/method '[public] 'Object 'setValue '[Object v]
+            "throw new UnsupportedOperationException();")))
 
       ;; public PersistentVectorN(IPersistentMap meta, ...)
       (apply j/method nil nil classname

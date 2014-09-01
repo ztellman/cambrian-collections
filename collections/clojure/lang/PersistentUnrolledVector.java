@@ -308,12 +308,32 @@ public class PersistentUnrolledVector {
     }
 
     static class Card2 extends APersistentVector implements IObj,
-	    IEditableCollection, IReduce {
+	    IEditableCollection, IReduce, IMapEntry {
 	final Object e0;
 	final Object e1;
 	private final IPersistentMap meta;
 	private int hash = -1;
 	private int hasheq = -1;
+
+	public Object key() {
+	    return e0;
+	}
+
+	public Object getKey() {
+	    return e0;
+	}
+
+	public Object val() {
+	    return e1;
+	}
+
+	public Object getValue() {
+	    return e1;
+	}
+
+	public Object setValue(Object v) {
+	    throw new UnsupportedOperationException();
+	}
 
 	Card2(IPersistentMap meta, Object e0, Object e1) {
 	    this.meta = meta;
