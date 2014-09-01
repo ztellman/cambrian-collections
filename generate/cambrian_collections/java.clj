@@ -1,6 +1,6 @@
 (ns cambrian-collections.java
   (:refer-clojure
-    :exclude [class import])
+    :exclude [class import cond])
   (:import
     [org.eclipse.jdt.core.formatter
      CodeFormatter]
@@ -71,3 +71,19 @@
 
 (defn invoke [method & args]
   (str method "(" (apply str (interpose "," args)) ")"))
+
+(defn cond [& clauses]
+  (loop [clauses (partition-all 2 clauses), s ""]
+    (if (empty? clauses)
+      s
+      (let [[pred statement] (first clauses)]
+        (recur
+          (rest clauses)
+          (str s
+            (when-not (empty? s) " else ")
+            (if statement
+              (str "if (" pred ") { " statement " } ")
+              (str "{ " pred " }"))))))))
+
+(defn return [expr]
+  (apply str "return " expr ";"))

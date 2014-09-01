@@ -9,40 +9,40 @@
      ConcurrentHashMap]
     [java.util
      HashMap]
-    [cambrian_collections
-     PersistentVector0
-     PersistentVector1
-     PersistentVector2
-     PersistentVector3
-     PersistentVector4
-     PersistentVector5]))
+    [clojure.lang
+     PersistentUnrolledVector]))
+
+(declare unrolled)
 
 (deftest test-vector-like
-  (check/assert-vector-like 1e3 PersistentVector0/EMPTY gen/int))
+  (check/assert-vector-like 1e3 (unrolled) gen/int))
 
 ;;;
 
-(defn tuple
+(defn unrolled
   ([]
-     PersistentVector0/EMPTY)
+     (PersistentUnrolledVector/create))
   ([a]
-     (PersistentVector1. a))
+     (PersistentUnrolledVector/create a))
   ([a b]
-     (PersistentVector2. a b))
+     (PersistentUnrolledVector/create a b))
   ([a b c]
-     (PersistentVector3. a b c))
+     (PersistentUnrolledVector/create a b c))
   ([a b c d]
-     (PersistentVector4. a b c d))
+     (PersistentUnrolledVector/create a b c d))
   ([a b c d e]
-     (PersistentVector5. a b c d e))
-  ([a b c d e & rst]
+     (PersistentUnrolledVector/create a b c d e))
+  ([a b c d e f]
+     (PersistentUnrolledVector/create a b c d e f))
+  ([a b c d e f & rst]
      (let [r (-> []
                transient
                (conj! a)
                (conj! b)
                (conj! c)
                (conj! d)
-               (conj! e))]
+               (conj! e)
+               (conj! f))]
        (loop [r r, s rst]
          (if (empty? s)
            (persistent! r)
@@ -57,21 +57,21 @@
                (println "\n  ** "~description ~type "\n")
                ~(bench-form-fn x)))
            (partition 2
-             ["list 1"    '(list 1)
-              "vector 1"  '(vector 1)
-              "tuple 1"   '(tuple 1)
-              "list 2"    '(list 1 2)
-              "vector 2"  '(vector 1 2)
-              "tuple 2"   '(tuple 1 2)
-              "list 3"    '(list 1 2 3)
-              "vector 3"  '(vector 1 2 3)
-              "tuple 3"   '(tuple 1 2 3)
-              "list 5"    '(list 1 2 3 4 5)
-              "vector 5"  '(vector 1 2 3 4 5)
-              "tuple 5"   '(tuple 1 2 3 4 5)
-              "list 7"    '(list 1 2 3 4 5 6 7)
-              "vector 7"  '(vector 1 2 3 4 5 6 7)
-              "tuple 7"   '(tuple 1 2 3 4 5 6 7)
+             ["list 1"       '(list 1)
+              "vector 1"     '(vector 1)
+              "unrolled 1"   '(unrolled 1)
+              "list 2"       '(list 1 2)
+              "vector 2"     '(vector 1 2)
+              "unrolled 2"   '(unrolled 1 2)
+              "list 3"       '(list 1 2 3)
+              "vector 3"     '(vector 1 2 3)
+              "unrolled 3"   '(unrolled 1 2 3)
+              "list 5"       '(list 1 2 3 4 5)
+              "vector 5"     '(vector 1 2 3 4 5)
+              "unrolled 5"   '(unrolled 1 2 3 4 5)
+              "list 7"       '(list 1 2 3 4 5 6 7)
+              "vector 7"     '(vector 1 2 3 4 5 6 7)
+              "unrolled 7"   '(unrolled 1 2 3 4 5 6 7)
               ])))))
 
 (deftest ^:benchmark benchmark-construction
@@ -85,6 +85,9 @@
 
 (deftest ^:benchmark benchmark-conj
   (do-benchmark "conj" (fn [x] `(let [x# ~x] (c/quick-bench (conj x# 1))))))
+
+(deftest ^:benchmark benchmark-into
+  (do-benchmark "into" (fn [x] `(let [x# ~x] (c/quick-bench (into (empty x#) x#))))))
 
 (deftest ^:benchmark benchmark-nth
   (do-benchmark "nth"

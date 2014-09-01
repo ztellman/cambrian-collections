@@ -5,10 +5,9 @@
      [vector :as v]]))
 
 (defn -main [& args]
-  (dotimes [i 6]
-    (spit
-      (str "collections/clojure/lang/PersistentVector" i ".java")
-      (j/format-java
-        (str
-          v/class-prelude
-          (v/fixed-arity-vector i))))))
+  (spit
+    (str "collections/clojure/lang/PersistentUnrolledVector.java")
+    (j/format-java
+      (str
+        v/class-prelude
+        (v/unrolled-vector 6)))))
