@@ -420,9 +420,64 @@
           "throw new UnsupportedOperationException();")
         "};")
 
+      (j/method '[public] "Object[]" 'toArray []
+        "return new Object[] {"
+        (->> (map
+               (fn [k v]
+                 (str "new MapEntry(" k "," v ")"))
+               ks
+               vs)
+          (interpose ",")
+          (apply str))
+        "};")
+
+      (j/class
+        {:extends 'ASeq
+         :implements '[IChunkedSeq Counted]}
+        'UnrolledChunkedSeq
+
+        "private final IPersistentMap meta;"
+        "private final int offset;"
+
+        (j/method nil nil 'UnrolledChunkedSeq '[IPersistentMap meta, int offset]
+          "this.offset = offset;"
+          "this.meta = meta;")
+
+        (j/method '[public] 'IChunk 'chunkedFirst []
+          "return new " (j/invoke 'ArrayChunk "toArray()" 'offset) ";")
+
+        (j/method '[public] 'ISeq 'chunkedNext []
+          "return null;")
+
+        (j/method '[public] 'ISeq 'chunkedMore []
+          "return PersistentList.EMPTY;")
+
+        (j/method '[public] 'UnrolledChunkedSeq 'withMeta '[IPersistentMap meta]
+          "return new " (j/invoke 'UnrolledChunkedSeq 'meta 'offset) ";")
+
+        (j/method '[public] 'Object 'first []
+          (apply j/switch 'offset
+            (mapcat
+              (fn [idx k v]
+                [idx (j/return "new " (j/invoke 'MapEntry k v))])
+              (range)
+              ks
+              vs))
+          "throw new IndexOutOfBoundsException();")
+
+        (j/method '[public] 'ISeq 'next []
+          (j/cond (str "offset < " (dec cardinality))
+            (j/return "new " (j/invoke 'UnrolledChunkedSeq 'null "offset+1")))
+          (j/return 'null))
+
+        (j/method '[public] 'int 'count []
+          "return " cardinality " - offset;"))
+
       ;; public ISeq seq()
       (j/method '[public] 'ISeq 'seq []
-        "return IteratorSeq.create(iterator());"))))
+        (if (zero? cardinality)
+          "return null;"
+          "return new UnrolledChunkedSeq(null, 0);")))))
 
 ;;;
 

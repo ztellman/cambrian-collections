@@ -114,7 +114,7 @@
   (do-benchmark "apply fixed"
     (fn [x]
       (let [cnt (count (eval x))]
-        `(let [f# (fn [~@(repeatedly cnt gensym)] )
+        `(let [f# (fn [~@(repeatedly cnt gensym)])
                x# ~x]
            (c/quick-bench (apply f# x#)))))))
 

@@ -105,6 +105,21 @@
     (fn [x]
       `(c/quick-bench (dorun (seq ~x))))))
 
+(deftest ^:benchmark benchmark-apply-variadic
+  (do-benchmark "apply variadic"
+    (fn [x]
+      `(let [f# (fn [& args#] args#)
+             x# ~x]
+         (c/quick-bench (apply f# x#))))))
+
+(deftest ^:benchmark benchmark-apply-fixed
+  (do-benchmark "apply fixed"
+    (fn [x]
+      (let [cnt (count (eval x))]
+        `(let [f# (fn [~@(repeatedly cnt gensym)])
+               x# ~x]
+           (c/quick-bench (apply f# x#)))))))
+
 (deftest ^:benchmark benchmark-hasheq
   (do-benchmark "hasheq" (fn [x] `(c/quick-bench (hash ~x)))))
 

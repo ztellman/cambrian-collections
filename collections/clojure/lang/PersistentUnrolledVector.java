@@ -145,6 +145,10 @@ public class PersistentUnrolledVector {
 	    return o == this ? true : super.equiv(o);
 	}
 
+	public Object[] toArray() {
+	    return new Object[] {};
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -163,8 +167,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < -1) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 0 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return null;
 	}
     }
 
@@ -297,6 +342,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -315,8 +364,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 0) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 1 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -495,6 +585,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0, e1 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -513,8 +607,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 1) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 2 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -698,6 +833,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0, e1, e2 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -716,8 +855,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 2) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 3 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -926,6 +1106,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0, e1, e2, e3 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -944,8 +1128,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 3) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 4 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -1180,6 +1405,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0, e1, e2, e3, e4 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -1198,8 +1427,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 4) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 5 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -1462,6 +1732,10 @@ public class PersistentUnrolledVector {
 	    }
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { e0, e1, e2, e3, e4, e5 };
+	}
+
 	public Iterator iterator() {
 	    return new Iterator() {
 		int i = 0;
@@ -1480,8 +1754,49 @@ public class PersistentUnrolledVector {
 	    };
 	}
 
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		return nth(offset);
+	    }
+
+	    public ISeq next() {
+		if (offset < 5) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 6 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 

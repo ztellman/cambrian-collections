@@ -552,8 +552,55 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] {};
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < -1) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 0 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return null;
 	}
     }
 
@@ -797,8 +844,57 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 0) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 1 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -1099,8 +1195,59 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0), new MapEntry(k1, v1) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		case 1:
+		    return new MapEntry(k1, v1);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 1) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 2 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -1459,8 +1606,62 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0), new MapEntry(k1, v1),
+		    new MapEntry(k2, v2) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		case 1:
+		    return new MapEntry(k1, v1);
+		case 2:
+		    return new MapEntry(k2, v2);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 2) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 3 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -1881,8 +2082,64 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0), new MapEntry(k1, v1),
+		    new MapEntry(k2, v2), new MapEntry(k3, v3) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		case 1:
+		    return new MapEntry(k1, v1);
+		case 2:
+		    return new MapEntry(k2, v2);
+		case 3:
+		    return new MapEntry(k3, v3);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 3) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 4 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -2360,8 +2617,67 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0), new MapEntry(k1, v1),
+		    new MapEntry(k2, v2), new MapEntry(k3, v3),
+		    new MapEntry(k4, v4) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		case 1:
+		    return new MapEntry(k1, v1);
+		case 2:
+		    return new MapEntry(k2, v2);
+		case 3:
+		    return new MapEntry(k3, v3);
+		case 4:
+		    return new MapEntry(k4, v4);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 4) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 5 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 
@@ -2908,8 +3224,69 @@ public class PersistentUnrolledMap {
 	    };
 	}
 
+	public Object[] toArray() {
+	    return new Object[] { new MapEntry(k0, v0), new MapEntry(k1, v1),
+		    new MapEntry(k2, v2), new MapEntry(k3, v3),
+		    new MapEntry(k4, v4), new MapEntry(k5, v5) };
+	}
+
+	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
+	    private final IPersistentMap meta;
+	    private final int offset;
+
+	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
+		this.offset = offset;
+		this.meta = meta;
+	    }
+
+	    public IChunk chunkedFirst() {
+		return new ArrayChunk(toArray(), offset);
+	    }
+
+	    public ISeq chunkedNext() {
+		return null;
+	    }
+
+	    public ISeq chunkedMore() {
+		return PersistentList.EMPTY;
+	    }
+
+	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
+		return new UnrolledChunkedSeq(meta, offset);
+	    }
+
+	    public Object first() {
+		switch (offset) {
+		case 0:
+		    return new MapEntry(k0, v0);
+		case 1:
+		    return new MapEntry(k1, v1);
+		case 2:
+		    return new MapEntry(k2, v2);
+		case 3:
+		    return new MapEntry(k3, v3);
+		case 4:
+		    return new MapEntry(k4, v4);
+		case 5:
+		    return new MapEntry(k5, v5);
+		}
+		throw new IndexOutOfBoundsException();
+	    }
+
+	    public ISeq next() {
+		if (offset < 5) {
+		    return new UnrolledChunkedSeq(null, offset + 1);
+		}
+		return null;
+	    }
+
+	    public int count() {
+		return 6 - offset;
+	    }
+	}
+
 	public ISeq seq() {
-	    return IteratorSeq.create(iterator());
+	    return new UnrolledChunkedSeq(null, 0);
 	}
     }
 }
