@@ -1,4 +1,4 @@
-(ns cambrian_collections.vector-test
+(ns cambrian-collections.vector-test
   (:require
     [criterium.core :as c]
     [clojure.test :refer :all]
@@ -15,7 +15,7 @@
 (declare unrolled)
 
 (deftest test-vector-like
-  (check/assert-vector-like 1e3 (unrolled) gen/int))
+  (check/assert-vector-like 1e4 (unrolled) gen/int))
 
 ;;;
 
@@ -35,7 +35,7 @@
   ([a b c d e f]
      (PersistentUnrolledVector/create a b c d e f))
   ([a b c d e f & rst]
-     (let [r (-> []
+     (let [r (-> (unrolled)
                transient
                (conj! a)
                (conj! b)
@@ -87,7 +87,11 @@
   (do-benchmark "conj" (fn [x] `(let [x# ~x] (c/quick-bench (conj x# 1))))))
 
 (deftest ^:benchmark benchmark-into
-  (do-benchmark "into" (fn [x] `(let [x# ~x] (c/quick-bench (into (empty x#) x#))))))
+  (do-benchmark "into"
+    (fn [x]
+      `(let [x# ~x]
+         (c/quick-bench
+           (persistent! (reduce conj! (transient empty x#) x#)))))))
 
 (deftest ^:benchmark benchmark-nth
   (do-benchmark "nth"

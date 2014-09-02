@@ -85,5 +85,5 @@
               (str "if (" pred ") { " statement " } ")
               (str "{ " pred " }"))))))))
 
-(defn return [expr]
-  (apply str "return " expr ";"))
+(defn return [& exprs]
+  (apply str "return " (apply str exprs) ";"))

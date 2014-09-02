@@ -20,10 +20,10 @@
 
 ;;;
 
-(defn transient-vector [max-arity]
+(defn transient-vector [max-cardinality]
   (let [fields (mapv
                  #(str "e" %)
-                 (range max-arity))]
+                 (range max-cardinality))]
     (j/class
       {:modifiers '[static]
        :implements '[ITransientVector Counted]
@@ -35,9 +35,9 @@
         (apply str))
 
       "private int count;"
-      "private boolean edit = true;"
+      "private transient boolean edit = true;"
 
-      (->> (range (inc max-arity))
+      (->> (range (inc max-cardinality))
         (map
           (fn [n]
             (let [fields (take n fields)]
@@ -62,7 +62,7 @@
       ;; public ITransientVector conj(Object val)
       (j/method '[public] 'ITransientVector 'conj '[Object val]
         "ensureEditable();"
-        (j/cond (str "count == " max-arity)
+        (j/cond (str "count == " max-cardinality)
 
           (str
             "ITransientCollection coll = PersistentVector.EMPTY.asTransient();\n"
@@ -168,23 +168,23 @@
                        (apply str
                          (interpose "," (take idx fields)))
                        ");\n"))])
-                (range (inc max-arity))))))
+                (range (inc max-cardinality))))))
         "throw new IllegalStateException();"))))
 
 ;;;
 
-(defn persistent-vector [arity max-arity]
-  (let [inc-classname (str 'Card (inc arity))
-        dec-classname (str 'Card (dec arity))
-        classname (str 'Card arity)
+(defn persistent-vector [cardinality max-cardinality]
+  (let [inc-classname (str 'Card (inc cardinality))
+        dec-classname (str 'Card (dec cardinality))
+        classname (str 'Card cardinality)
         fields (mapv
                  #(str "e" %)
-                 (range arity))]
+                 (range cardinality))]
     (j/class
       {:modifiers '[static]
        :implements (concat
                      '[IObj IEditableCollection IReduce]
-                     (when (= 2 arity)
+                     (when (= 2 cardinality)
                        '[IMapEntry]))
        :extends 'APersistentVector}
      classname
@@ -199,7 +199,7 @@
       "private int hash = -1;"
       "private int hasheq = -1;"
 
-      (when (= 2 arity)
+      (when (= 2 cardinality)
         (str
 
           (j/method '[public] 'Object 'key []
@@ -217,7 +217,7 @@
           (j/method '[public] 'Object 'setValue '[Object v]
             "throw new UnsupportedOperationException();")))
 
-      ;; public PersistentVectorN(IPersistentMap meta, ...)
+      ;; public CardN(IPersistentMap meta, ...)
       (apply j/method nil nil classname
         (concat '[IPersistentMap meta] (interleave (repeat 'Object) fields))
         "this.meta = meta;"
@@ -225,7 +225,7 @@
           #(str "this." % " = " % ";")
           fields))
 
-      ;; public PersistentVectorN(...)
+      ;; public CardN(...)
       (apply j/method '[public] nil classname (interleave (repeat 'Object) fields)
         "this.meta = null;"
         (map
@@ -242,7 +242,7 @@
 
       ;; public Object nth(int i)
       (j/method '[public] 'Object 'nth '[int i]
-        (if (zero? arity)
+        (if (zero? cardinality)
           "throw new IndexOutOfBoundsException();"
           (apply j/switch 'i
             (concat
@@ -253,7 +253,7 @@
 
       ;; public Object nth(int i, Object notFound
       (j/method '[public] 'Object 'nth '[int i, Object notFound]
-        (if (zero? arity)
+        (if (zero? cardinality)
           "return notFound;"
           (apply j/switch 'i
             (concat
@@ -264,7 +264,7 @@
 
       ;; public int count()
       (j/method '[public] 'int 'count []
-        (str "return " arity ";"))
+        (str "return " cardinality ";"))
 
       ;; public IPersistentVector empty()
       (j/method '[public] 'IPersistentVector 'empty []
@@ -276,21 +276,23 @@
           (concat
 
             (interleave
-              (range arity)
+              (range cardinality)
               (map
                 #(str "return new "
                    (apply j/invoke classname 'meta (assoc fields % 'val))
                    ";\n")
-                (range arity)))
+                (range cardinality)))
 
-            [arity "return cons(val);"]
+            [cardinality "return cons(val);"]
 
             ["throw new IndexOutOfBoundsException();\n"])))
 
       ;; public IPersistentVector cons(Object val)
       (j/method '[public] 'IPersistentVector 'cons '[Object val]
-        (if (== max-arity arity)
-          "return (IPersistentVector) asTransient().conj(val).persistent();"
+        (if (== max-cardinality cardinality)
+          (str
+            "IPersistentVector v = (IPersistentVector) asTransient().conj(val).persistent();"
+            "return (IPersistentVector) ((IObj) v).withMeta(meta);")
           (str "return new "
             (apply j/invoke inc-classname 'meta (conj fields 'val))
             ";\n")))
@@ -303,7 +305,7 @@
 
       ;; public IPersistentVector pop()
       (j/method '[public] 'IPersistentVector 'pop []
-        (if (zero? arity)
+        (if (zero? cardinality)
           "throw new IllegalStateException(\"Can't pop empty vector\");"
           (str "return new "
             (apply j/invoke dec-classname 'meta (pop fields))
@@ -322,10 +324,10 @@
       ;; public Object reduce(IFn f)
       (j/method '[public] 'Object 'reduce '[IFn f]
         (cond
-          (zero? arity)
+          (zero? cardinality)
           "return f.invoke();"
 
-          (= 1 arity)
+          (= 1 cardinality)
           (str "return " (first fields) ";")
 
           :else
@@ -362,13 +364,13 @@
               (fn [f]
                 (str "hash = (31 * hash) + " (j/invoke 'Util.hasheq f) ";"))
               fields))
-          "hash = " (j/invoke 'Murmur3.mixCollHash 'hash arity) ";"
+          "hash = " (j/invoke 'Murmur3.mixCollHash 'hash cardinality) ";"
           "this.hasheq = hash; }")
         "return hasheq;")
 
       ;; public boolean equals(Object o)
       (j/method '[public] 'boolean 'equals '[Object o]
-        (if (zero? arity)
+        (if (zero? cardinality)
           (str "return o == this ? true : super.equals(o);")
           (j/cond
             (str "o instanceof " classname)
@@ -383,7 +385,7 @@
 
       ;; public boolean equiv(Object o)
       (j/method '[public] 'boolean 'equiv '[Object o]
-        (if (zero? arity)
+        (if (zero? cardinality)
           (str "return o == this ? true : super.equiv(o);")
           (j/cond
             (str "o instanceof " classname)
@@ -401,7 +403,7 @@
         "return new Iterator() {"
         "int i = 0;"
         (j/method '[public] 'boolean 'hasNext []
-          "return i < " arity ";")
+          "return i < " cardinality ";")
         (j/method '[public] 'Object 'next []
           "return nth(i++);")
         (j/method '[public] 'void 'remove []
@@ -414,31 +416,31 @@
 
 ;;;
 
-(defn unrolled-vector [max-arity]
+(defn unrolled-vector [max-cardinality]
   (let [fields (mapv
                  #(str "e" %)
-                 (range (inc max-arity)))]
+                 (range (inc max-cardinality)))]
     (j/class
       {:modifiers '[public]}
       'PersistentUnrolledVector
 
       "static IPersistentVector EMPTY = new Card0();"
 
-      (->> (range (inc max-arity))
+      (->> (range (inc max-cardinality))
         (map
           (fn [n]
             (j/method '[public static] 'IPersistentVector 'create
               (->> fields (take n) (mapcat #(list 'Object %)))
               (if (zero? n)
-                "return PersistentUnrolledVector.EMPTY;"
+                "return EMPTY;"
                 (str
                   "return new Card" n "("
                   (apply str (interpose "," (take n fields)))
                   ");")))))
         (apply str))
 
-      (->> (range (inc max-arity))
-        (map #(persistent-vector % max-arity))
+      (->> (range (inc max-cardinality))
+        (map #(persistent-vector % max-cardinality))
         (apply str))
 
-      (transient-vector max-arity))))
+      (transient-vector max-cardinality))))
