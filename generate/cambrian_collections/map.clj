@@ -48,7 +48,7 @@
              (range cardinality))
         fields (interleave ks vs hs)]
     (j/class
-      {:modifiers '[static]
+      {:modifiers '[public static]
        :implements '[IObj IEditableCollection IReduce]
        :extends 'APersistentMap}
      classname
@@ -64,9 +64,6 @@
 
       (j/field '[private final] 'IPersistentMap 'meta)
 
-      "private int hash = -1;"
-      "private int hasheq = -1;"
-
       ;; public CardN(IPersistentMap meta, ...)
       (apply j/method nil nil classname
         (concat '[IPersistentMap meta] (interleave (cycle '[Object Object int]) fields))
@@ -81,6 +78,26 @@
         (map
           #(str "this." % " = " % ";")
           (interleave ks vs hs)))
+
+      "\n\n// only for use with *print-dup*, assumes correct cardinality\n"
+      (j/method '[public static] classname 'create '[Map m]
+        "Iterator it = m.entrySet().iterator();"
+        (apply str
+          (map
+            (fn [idx k v h]
+              (let [m (str 'm idx)]
+                (str
+                  "Map.Entry " m " = (Map.Entry) it.next();"
+                  "Object " k " = " m ".getKey();"
+                  "Object " v " = " m ".getValue();"
+                  "int " h " = Util.hasheq(" k ");")))
+            (range)
+            ks
+            vs
+            hs))
+        (j/cond "it.hasNext()"
+          "throw new IllegalArgumentException(\"Incorrect cardinality in create method\");")
+        (j/return "new " (apply j/invoke classname (interleave ks vs hs))))
 
       ;; public IPersistentMap meta()
       (j/method '[public] 'IPersistentMap 'meta []
@@ -226,7 +243,7 @@
 
       ;; public int hashCode()
       (j/method '[public] 'int 'hashCode []
-        (j/cond "hash == -1"
+        (j/cond "_hash == -1"
           (str
             (apply str
               "int h = 0;"
@@ -235,12 +252,12 @@
                   (str "h += " (j/invoke 'Util.hash k) " ^ " (j/invoke 'Util.hash v) ";"))
                 ks
                 vs))
-            "this.hash = h;"))
-        "return hash;")
+            "_hash = h;"))
+        "return _hash;")
 
       ;; public int hasheq()
       (j/method '[public] 'int 'hasheq []
-        (j/cond "hasheq == -1"
+        (j/cond "_hasheq == -1"
           (str
             (apply str
               "int h = 0;"
@@ -252,8 +269,8 @@
                       2) ";"))
                 hs
                 vs))
-            "this.hasheq = " (j/invoke 'Murmur3.mixCollHash 'h cardinality) ";"))
-        "return hasheq;")
+            "_hasheq = " (j/invoke 'Murmur3.mixCollHash 'h cardinality) ";"))
+        "return _hasheq;")
 
       ;; public boolean equiv(Object o)
       (j/method '[public] 'boolean 'equiv '[Object o]

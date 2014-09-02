@@ -49,11 +49,9 @@ public class PersistentUnrolledVector {
 	return new Card6(e0, e1, e2, e3, e4, e5);
     }
 
-    static class Card0 extends APersistentVector implements IObj,
+    public static class Card0 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card0(IPersistentMap meta) {
 	    this.meta = meta;
@@ -61,6 +59,15 @@ public class PersistentUnrolledVector {
 
 	public Card0() {
 	    this.meta = null;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card0 create(IPersistentVector v) {
+	    if (v.count() != 0) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card0();
 	}
 
 	public IPersistentMap meta() {
@@ -121,20 +128,20 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = Murmur3.mixCollHash(hash, 0);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -172,12 +179,10 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card1 extends APersistentVector implements IObj,
+    public static class Card1 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	final Object e0;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card1(IPersistentMap meta, Object e0) {
 	    this.meta = meta;
@@ -187,6 +192,15 @@ public class PersistentUnrolledVector {
 	public Card1(Object e0) {
 	    this.meta = null;
 	    this.e0 = e0;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card1 create(IPersistentVector v) {
+	    if (v.count() != 1) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card1(v.nth(0));
 	}
 
 	public IPersistentMap meta() {
@@ -267,22 +281,22 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = Murmur3.mixCollHash(hash, 1);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -369,13 +383,11 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card2 extends APersistentVector implements IObj,
+    public static class Card2 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce, IMapEntry {
 	final Object e0;
 	final Object e1;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	public Object key() {
 	    return e0;
@@ -407,6 +419,15 @@ public class PersistentUnrolledVector {
 	    this.meta = null;
 	    this.e0 = e0;
 	    this.e1 = e1;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card2 create(IPersistentVector v) {
+	    if (v.count() != 2) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card2(v.nth(0), v.nth(1));
 	}
 
 	public IPersistentMap meta() {
@@ -506,24 +527,24 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
 		hash = (31 * hash) + (e1 == null ? 0 : e1.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = (31 * hash) + Util.hasheq(e1);
 		hash = Murmur3.mixCollHash(hash, 2);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -612,14 +633,12 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card3 extends APersistentVector implements IObj,
+    public static class Card3 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	final Object e0;
 	final Object e1;
 	final Object e2;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card3(IPersistentMap meta, Object e0, Object e1, Object e2) {
 	    this.meta = meta;
@@ -633,6 +652,15 @@ public class PersistentUnrolledVector {
 	    this.e0 = e0;
 	    this.e1 = e1;
 	    this.e2 = e2;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card3 create(IPersistentVector v) {
+	    if (v.count() != 3) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card3(v.nth(0), v.nth(1), v.nth(2));
 	}
 
 	public IPersistentMap meta() {
@@ -750,26 +778,26 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
 		hash = (31 * hash) + (e1 == null ? 0 : e1.hashCode());
 		hash = (31 * hash) + (e2 == null ? 0 : e2.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = (31 * hash) + Util.hasheq(e1);
 		hash = (31 * hash) + Util.hasheq(e2);
 		hash = Murmur3.mixCollHash(hash, 3);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -860,15 +888,13 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card4 extends APersistentVector implements IObj,
+    public static class Card4 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	final Object e0;
 	final Object e1;
 	final Object e2;
 	final Object e3;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card4(IPersistentMap meta, Object e0, Object e1, Object e2, Object e3) {
 	    this.meta = meta;
@@ -884,6 +910,15 @@ public class PersistentUnrolledVector {
 	    this.e1 = e1;
 	    this.e2 = e2;
 	    this.e3 = e3;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card4 create(IPersistentVector v) {
+	    if (v.count() != 4) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card4(v.nth(0), v.nth(1), v.nth(2), v.nth(3));
 	}
 
 	public IPersistentMap meta() {
@@ -1019,28 +1054,28 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
 		hash = (31 * hash) + (e1 == null ? 0 : e1.hashCode());
 		hash = (31 * hash) + (e2 == null ? 0 : e2.hashCode());
 		hash = (31 * hash) + (e3 == null ? 0 : e3.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = (31 * hash) + Util.hasheq(e1);
 		hash = (31 * hash) + Util.hasheq(e2);
 		hash = (31 * hash) + Util.hasheq(e3);
 		hash = Murmur3.mixCollHash(hash, 4);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -1133,7 +1168,7 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card5 extends APersistentVector implements IObj,
+    public static class Card5 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	final Object e0;
 	final Object e1;
@@ -1141,8 +1176,6 @@ public class PersistentUnrolledVector {
 	final Object e3;
 	final Object e4;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card5(IPersistentMap meta, Object e0, Object e1, Object e2, Object e3,
 		Object e4) {
@@ -1161,6 +1194,15 @@ public class PersistentUnrolledVector {
 	    this.e2 = e2;
 	    this.e3 = e3;
 	    this.e4 = e4;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card5 create(IPersistentVector v) {
+	    if (v.count() != 5) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card5(v.nth(0), v.nth(1), v.nth(2), v.nth(3), v.nth(4));
 	}
 
 	public IPersistentMap meta() {
@@ -1314,20 +1356,20 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
 		hash = (31 * hash) + (e1 == null ? 0 : e1.hashCode());
 		hash = (31 * hash) + (e2 == null ? 0 : e2.hashCode());
 		hash = (31 * hash) + (e3 == null ? 0 : e3.hashCode());
 		hash = (31 * hash) + (e4 == null ? 0 : e4.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = (31 * hash) + Util.hasheq(e1);
@@ -1335,9 +1377,9 @@ public class PersistentUnrolledVector {
 		hash = (31 * hash) + Util.hasheq(e3);
 		hash = (31 * hash) + Util.hasheq(e4);
 		hash = Murmur3.mixCollHash(hash, 5);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {
@@ -1432,7 +1474,7 @@ public class PersistentUnrolledVector {
 	}
     }
 
-    static class Card6 extends APersistentVector implements IObj,
+    public static class Card6 extends APersistentVector implements IObj,
 	    IEditableCollection, IReduce {
 	final Object e0;
 	final Object e1;
@@ -1441,8 +1483,6 @@ public class PersistentUnrolledVector {
 	final Object e4;
 	final Object e5;
 	private final IPersistentMap meta;
-	private int hash = -1;
-	private int hasheq = -1;
 
 	Card6(IPersistentMap meta, Object e0, Object e1, Object e2, Object e3,
 		Object e4, Object e5) {
@@ -1464,6 +1504,16 @@ public class PersistentUnrolledVector {
 	    this.e3 = e3;
 	    this.e4 = e4;
 	    this.e5 = e5;
+	}
+
+	// only for use with *print-dup*, assumes correct cardinality
+	public static Card6 create(IPersistentVector v) {
+	    if (v.count() != 6) {
+		throw new IllegalArgumentException(
+			"Incorrect cardinality in create method");
+	    }
+	    return new Card6(v.nth(0), v.nth(1), v.nth(2), v.nth(3), v.nth(4),
+		    v.nth(5));
 	}
 
 	public IPersistentMap meta() {
@@ -1637,7 +1687,7 @@ public class PersistentUnrolledVector {
 	}
 
 	public int hashCode() {
-	    if (this.hash == -1) {
+	    if (_hash == -1) {
 		int hash = 1;
 		hash = (31 * hash) + (e0 == null ? 0 : e0.hashCode());
 		hash = (31 * hash) + (e1 == null ? 0 : e1.hashCode());
@@ -1645,13 +1695,13 @@ public class PersistentUnrolledVector {
 		hash = (31 * hash) + (e3 == null ? 0 : e3.hashCode());
 		hash = (31 * hash) + (e4 == null ? 0 : e4.hashCode());
 		hash = (31 * hash) + (e5 == null ? 0 : e5.hashCode());
-		this.hash = hash;
+		_hash = hash;
 	    }
-	    return hash;
+	    return _hash;
 	}
 
 	public int hasheq() {
-	    if (this.hasheq == -1) {
+	    if (_hasheq == -1) {
 		int hash = 1;
 		hash = (31 * hash) + Util.hasheq(e0);
 		hash = (31 * hash) + Util.hasheq(e1);
@@ -1660,9 +1710,9 @@ public class PersistentUnrolledVector {
 		hash = (31 * hash) + Util.hasheq(e4);
 		hash = (31 * hash) + Util.hasheq(e5);
 		hash = Murmur3.mixCollHash(hash, 6);
-		this.hasheq = hash;
+		_hasheq = hash;
 	    }
-	    return hasheq;
+	    return _hasheq;
 	}
 
 	public boolean equals(Object o) {

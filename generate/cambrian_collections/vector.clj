@@ -181,7 +181,7 @@
                  #(str "e" %)
                  (range cardinality))]
     (j/class
-      {:modifiers '[static]
+      {:modifiers '[public static]
        :implements (concat
                      '[IObj IEditableCollection IReduce]
                      (when (= 2 cardinality)
@@ -195,9 +195,6 @@
         (apply str))
 
       (j/field '[private final] 'IPersistentMap 'meta)
-
-      "private int hash = -1;"
-      "private int hasheq = -1;"
 
       (when (= 2 cardinality)
         (str
@@ -231,6 +228,17 @@
         (map
           #(str "this." % " = " % ";")
           fields))
+
+      "\n\n// only for use with *print-dup*, assumes correct cardinality\n"
+      (j/method '[public static] classname 'create '[IPersistentVector v]
+        (j/cond (str "v.count() != " cardinality)
+          "throw new IllegalArgumentException(\"Incorrect cardinality in create method\");")
+        (j/return "new "
+          (apply j/invoke classname
+            (map
+              (fn [n]
+                (j/invoke 'v.nth n))
+              (range cardinality)))))
 
       ;; public IPersistentMap meta()
       (j/method '[public] 'IPersistentMap 'meta []
@@ -345,19 +353,19 @@
 
       ;; public int hashCode()
       (j/method '[public] 'int 'hashCode []
-        (str "if (this.hash == -1) {"
+        (str "if (_hash == -1) {"
           "int hash = 1;"
           (apply str
             (map
               (fn [f]
                 (str "hash = (31 * hash) + (" f " == null ? 0 : " f ".hashCode());"))
               fields))
-          "this.hash = hash; }")
-        "return hash;")
+          "_hash = hash; }")
+        "return _hash;")
 
       ;; public int hasheq()
       (j/method '[public] 'int 'hasheq []
-        (str "if (this.hasheq == -1) {"
+        (str "if (_hasheq == -1) {"
           "int hash = 1;"
           (apply str
             (map
@@ -365,8 +373,8 @@
                 (str "hash = (31 * hash) + " (j/invoke 'Util.hasheq f) ";"))
               fields))
           "hash = " (j/invoke 'Murmur3.mixCollHash 'hash cardinality) ";"
-          "this.hasheq = hash; }")
-        "return hasheq;")
+          "_hasheq = hash; }")
+        "return _hasheq;")
 
       ;; public boolean equals(Object o)
       (j/method '[public] 'boolean 'equals '[Object o]
