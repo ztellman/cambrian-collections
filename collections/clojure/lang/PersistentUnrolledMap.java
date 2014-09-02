@@ -556,49 +556,6 @@ public class PersistentUnrolledMap {
 	    return new Object[] {};
 	}
 
-	class UnrolledChunkedSeq extends ASeq implements IChunkedSeq, Counted {
-	    private final IPersistentMap meta;
-	    private final int offset;
-
-	    UnrolledChunkedSeq(IPersistentMap meta, int offset) {
-		this.offset = offset;
-		this.meta = meta;
-	    }
-
-	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
-	    }
-
-	    public ISeq chunkedNext() {
-		return null;
-	    }
-
-	    public ISeq chunkedMore() {
-		return PersistentList.EMPTY;
-	    }
-
-	    public UnrolledChunkedSeq withMeta(IPersistentMap meta) {
-		return new UnrolledChunkedSeq(meta, offset);
-	    }
-
-	    public Object first() {
-		switch (offset) {
-		}
-		throw new IndexOutOfBoundsException();
-	    }
-
-	    public ISeq next() {
-		if (offset < -1) {
-		    return new UnrolledChunkedSeq(null, offset + 1);
-		}
-		return null;
-	    }
-
-	    public int count() {
-		return 0 - offset;
-	    }
-	}
-
 	public ISeq seq() {
 	    return null;
 	}

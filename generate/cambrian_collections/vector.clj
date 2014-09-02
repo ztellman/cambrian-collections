@@ -415,40 +415,41 @@
           "throw new UnsupportedOperationException();")
         "};")
 
-      (j/class
-        {:extends 'ASeq
-         :implements '[IChunkedSeq Counted]}
-        'UnrolledChunkedSeq
+      (when (pos? cardinality)
+        (j/class
+          {:extends 'ASeq
+           :implements '[IChunkedSeq Counted]}
+          'UnrolledChunkedSeq
 
-        "private final IPersistentMap meta;"
-        "private final int offset;"
+          "private final IPersistentMap meta;"
+          "private final int offset;"
 
-        (j/method nil nil 'UnrolledChunkedSeq '[IPersistentMap meta, int offset]
-          "this.offset = offset;"
-          "this.meta = meta;")
+          (j/method nil nil 'UnrolledChunkedSeq '[IPersistentMap meta, int offset]
+            "this.offset = offset;"
+            "this.meta = meta;")
 
-        (j/method '[public] 'IChunk 'chunkedFirst []
-          "return new " (j/invoke 'ArrayChunk "toArray()" 'offset) ";")
+          (j/method '[public] 'IChunk 'chunkedFirst []
+            "return new " (j/invoke 'ArrayChunk "toArray()" 'offset) ";")
 
-        (j/method '[public] 'ISeq 'chunkedNext []
-          "return null;")
+          (j/method '[public] 'ISeq 'chunkedNext []
+            "return null;")
 
-        (j/method '[public] 'ISeq 'chunkedMore []
-          "return PersistentList.EMPTY;")
+          (j/method '[public] 'ISeq 'chunkedMore []
+            "return PersistentList.EMPTY;")
 
-        (j/method '[public] 'UnrolledChunkedSeq 'withMeta '[IPersistentMap meta]
-          "return new " (j/invoke 'UnrolledChunkedSeq 'meta 'offset) ";")
+          (j/method '[public] 'UnrolledChunkedSeq 'withMeta '[IPersistentMap meta]
+            "return new " (j/invoke 'UnrolledChunkedSeq 'meta 'offset) ";")
 
-        (j/method '[public] 'Object 'first []
-          (j/return (j/invoke 'nth 'offset)))
+          (j/method '[public] 'Object 'first []
+            (j/return (j/invoke 'nth 'offset)))
 
-        (j/method '[public] 'ISeq 'next []
-          (j/cond (str "offset < " (dec cardinality))
-            (j/return "new " (j/invoke 'UnrolledChunkedSeq 'null "offset+1")))
-          (j/return 'null))
+          (j/method '[public] 'ISeq 'next []
+            (j/cond (str "offset < " (dec cardinality))
+              (j/return "new " (j/invoke 'UnrolledChunkedSeq 'null "offset+1")))
+            (j/return 'null))
 
-        (j/method '[public] 'int 'count []
-          "return " cardinality " - offset;"))
+          (j/method '[public] 'int 'count []
+            "return " cardinality " - offset;")))
 
       ;; public ISeq seq()
       (j/method '[public] 'ISeq 'seq []
