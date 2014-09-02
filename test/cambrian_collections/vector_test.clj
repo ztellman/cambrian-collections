@@ -17,7 +17,7 @@
 (deftest test-vector-like
   (check/assert-vector-like 1e4 (unrolled) gen/int))
 
-(deftest test-print-dup
+#_(deftest test-print-dup
   (binding [*print-dup* true]
     (let [m (unrolled 1 2 3 4)]
       (= m (read-string (pr-str m))))))

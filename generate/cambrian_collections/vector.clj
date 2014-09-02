@@ -229,8 +229,8 @@
           #(str "this." % " = " % ";")
           fields))
 
-      "\n\n// only for use with *print-dup*, assumes correct cardinality\n"
-      (j/method '[public static] classname 'create '[IPersistentVector v]
+      #_"\n\n// only for use with *print-dup*, assumes correct cardinality\n"
+      #_(j/method '[public static] classname 'create '[IPersistentVector v]
         (j/cond (str "v.count() != " cardinality)
           "throw new IllegalArgumentException(\"Incorrect cardinality in create method\");")
         (j/return "new "

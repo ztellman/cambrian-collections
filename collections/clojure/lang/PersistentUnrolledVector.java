@@ -61,15 +61,6 @@ public class PersistentUnrolledVector {
 	    this.meta = null;
 	}
 
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card0 create(IPersistentVector v) {
-	    if (v.count() != 0) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card0();
-	}
-
 	public IPersistentMap meta() {
 	    return meta;
 	}
@@ -192,15 +183,6 @@ public class PersistentUnrolledVector {
 	public Card1(Object e0) {
 	    this.meta = null;
 	    this.e0 = e0;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card1 create(IPersistentVector v) {
-	    if (v.count() != 1) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card1(v.nth(0));
 	}
 
 	public IPersistentMap meta() {
@@ -419,15 +401,6 @@ public class PersistentUnrolledVector {
 	    this.meta = null;
 	    this.e0 = e0;
 	    this.e1 = e1;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card2 create(IPersistentVector v) {
-	    if (v.count() != 2) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card2(v.nth(0), v.nth(1));
 	}
 
 	public IPersistentMap meta() {
@@ -652,15 +625,6 @@ public class PersistentUnrolledVector {
 	    this.e0 = e0;
 	    this.e1 = e1;
 	    this.e2 = e2;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card3 create(IPersistentVector v) {
-	    if (v.count() != 3) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card3(v.nth(0), v.nth(1), v.nth(2));
 	}
 
 	public IPersistentMap meta() {
@@ -910,15 +874,6 @@ public class PersistentUnrolledVector {
 	    this.e1 = e1;
 	    this.e2 = e2;
 	    this.e3 = e3;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card4 create(IPersistentVector v) {
-	    if (v.count() != 4) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card4(v.nth(0), v.nth(1), v.nth(2), v.nth(3));
 	}
 
 	public IPersistentMap meta() {
@@ -1194,15 +1149,6 @@ public class PersistentUnrolledVector {
 	    this.e2 = e2;
 	    this.e3 = e3;
 	    this.e4 = e4;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card5 create(IPersistentVector v) {
-	    if (v.count() != 5) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card5(v.nth(0), v.nth(1), v.nth(2), v.nth(3), v.nth(4));
 	}
 
 	public IPersistentMap meta() {
@@ -1504,16 +1450,6 @@ public class PersistentUnrolledVector {
 	    this.e3 = e3;
 	    this.e4 = e4;
 	    this.e5 = e5;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card6 create(IPersistentVector v) {
-	    if (v.count() != 6) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card6(v.nth(0), v.nth(1), v.nth(2), v.nth(3), v.nth(4),
-		    v.nth(5));
 	}
 
 	public IPersistentMap meta() {

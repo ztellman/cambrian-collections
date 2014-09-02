@@ -400,16 +400,6 @@ public class PersistentUnrolledMap {
 	    this.meta = null;
 	}
 
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card0 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card0();
-	}
-
 	public IPersistentMap meta() {
 	    return meta;
 	}
@@ -588,20 +578,6 @@ public class PersistentUnrolledMap {
 	    this.k0 = k0;
 	    this.v0 = v0;
 	    this.h0 = h0;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card1 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card1(k0, v0, h0);
 	}
 
 	public IPersistentMap meta() {
@@ -904,24 +880,6 @@ public class PersistentUnrolledMap {
 	    this.k1 = k1;
 	    this.v1 = v1;
 	    this.h1 = h1;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card2 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    Map.Entry m1 = (Map.Entry) it.next();
-	    Object k1 = m1.getKey();
-	    Object v1 = m1.getValue();
-	    int h1 = Util.hasheq(k1);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card2(k0, v0, h0, k1, v1, h1);
 	}
 
 	public IPersistentMap meta() {
@@ -1283,28 +1241,6 @@ public class PersistentUnrolledMap {
 	    this.k2 = k2;
 	    this.v2 = v2;
 	    this.h2 = h2;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card3 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    Map.Entry m1 = (Map.Entry) it.next();
-	    Object k1 = m1.getKey();
-	    Object v1 = m1.getValue();
-	    int h1 = Util.hasheq(k1);
-	    Map.Entry m2 = (Map.Entry) it.next();
-	    Object k2 = m2.getKey();
-	    Object v2 = m2.getValue();
-	    int h2 = Util.hasheq(k2);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card3(k0, v0, h0, k1, v1, h1, k2, v2, h2);
 	}
 
 	public IPersistentMap meta() {
@@ -1728,32 +1664,6 @@ public class PersistentUnrolledMap {
 	    this.k3 = k3;
 	    this.v3 = v3;
 	    this.h3 = h3;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card4 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    Map.Entry m1 = (Map.Entry) it.next();
-	    Object k1 = m1.getKey();
-	    Object v1 = m1.getValue();
-	    int h1 = Util.hasheq(k1);
-	    Map.Entry m2 = (Map.Entry) it.next();
-	    Object k2 = m2.getKey();
-	    Object v2 = m2.getValue();
-	    int h2 = Util.hasheq(k2);
-	    Map.Entry m3 = (Map.Entry) it.next();
-	    Object k3 = m3.getKey();
-	    Object v3 = m3.getValue();
-	    int h3 = Util.hasheq(k3);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card4(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3, h3);
 	}
 
 	public IPersistentMap meta() {
@@ -2239,37 +2149,6 @@ public class PersistentUnrolledMap {
 	    this.k4 = k4;
 	    this.v4 = v4;
 	    this.h4 = h4;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card5 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    Map.Entry m1 = (Map.Entry) it.next();
-	    Object k1 = m1.getKey();
-	    Object v1 = m1.getValue();
-	    int h1 = Util.hasheq(k1);
-	    Map.Entry m2 = (Map.Entry) it.next();
-	    Object k2 = m2.getKey();
-	    Object v2 = m2.getValue();
-	    int h2 = Util.hasheq(k2);
-	    Map.Entry m3 = (Map.Entry) it.next();
-	    Object k3 = m3.getKey();
-	    Object v3 = m3.getValue();
-	    int h3 = Util.hasheq(k3);
-	    Map.Entry m4 = (Map.Entry) it.next();
-	    Object k4 = m4.getKey();
-	    Object v4 = m4.getValue();
-	    int h4 = Util.hasheq(k4);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card5(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3, h3,
-		    k4, v4, h4);
 	}
 
 	public IPersistentMap meta() {
@@ -2817,41 +2696,6 @@ public class PersistentUnrolledMap {
 	    this.k5 = k5;
 	    this.v5 = v5;
 	    this.h5 = h5;
-	}
-
-	// only for use with *print-dup*, assumes correct cardinality
-	public static Card6 create(Map m) {
-	    Iterator it = m.entrySet().iterator();
-	    Map.Entry m0 = (Map.Entry) it.next();
-	    Object k0 = m0.getKey();
-	    Object v0 = m0.getValue();
-	    int h0 = Util.hasheq(k0);
-	    Map.Entry m1 = (Map.Entry) it.next();
-	    Object k1 = m1.getKey();
-	    Object v1 = m1.getValue();
-	    int h1 = Util.hasheq(k1);
-	    Map.Entry m2 = (Map.Entry) it.next();
-	    Object k2 = m2.getKey();
-	    Object v2 = m2.getValue();
-	    int h2 = Util.hasheq(k2);
-	    Map.Entry m3 = (Map.Entry) it.next();
-	    Object k3 = m3.getKey();
-	    Object v3 = m3.getValue();
-	    int h3 = Util.hasheq(k3);
-	    Map.Entry m4 = (Map.Entry) it.next();
-	    Object k4 = m4.getKey();
-	    Object v4 = m4.getValue();
-	    int h4 = Util.hasheq(k4);
-	    Map.Entry m5 = (Map.Entry) it.next();
-	    Object k5 = m5.getKey();
-	    Object v5 = m5.getValue();
-	    int h5 = Util.hasheq(k5);
-	    if (it.hasNext()) {
-		throw new IllegalArgumentException(
-			"Incorrect cardinality in create method");
-	    }
-	    return new Card6(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3, h3,
-		    k4, v4, h4, k5, v5, h5);
 	}
 
 	public IPersistentMap meta() {

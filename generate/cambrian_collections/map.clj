@@ -79,8 +79,8 @@
           #(str "this." % " = " % ";")
           (interleave ks vs hs)))
 
-      "\n\n// only for use with *print-dup*, assumes correct cardinality\n"
-      (j/method '[public static] classname 'create '[Map m]
+      #_"\n\n// only for use with *print-dup*, assumes correct cardinality\n"
+      #_(j/method '[public static] classname 'create '[Map m]
         "Iterator it = m.entrySet().iterator();"
         (apply str
           (map
