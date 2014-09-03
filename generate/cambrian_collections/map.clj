@@ -556,7 +556,7 @@
                 (fn [idx k]
                   [idx
                    (j/cond (str k "== key")
-                     (j/return (- max-cardinality idx)))])
+                     (j/return (- max-cardinality idx 1)))])
                 (range)
                 (reverse ks))
               [(j/return -1)])))
