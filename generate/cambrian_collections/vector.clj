@@ -293,8 +293,10 @@
       (j/method '[public] 'IPersistentVector 'cons '[Object val]
         (if (== max-cardinality cardinality)
           (str
-            "IPersistentVector v = (IPersistentVector) asTransient().conj(val).persistent();"
-            "return (IPersistentVector) ((IObj) v).withMeta(meta);")
+            "return new PersistentVector(meta,"
+            (inc max-cardinality)
+            ", 5, PersistentVector.EMPTY_NODE, new Object[] {"
+            (str/join "," fields) ",val});")
           (str "return new "
             (apply j/invoke inc-classname 'meta (conj fields 'val))
             ";\n")))

@@ -1528,9 +1528,9 @@ public class PersistentUnrolledVector {
 	}
 
 	public IPersistentVector cons(Object val) {
-	    IPersistentVector v = (IPersistentVector) asTransient().conj(val)
-		    .persistent();
-	    return (IPersistentVector) ((IObj) v).withMeta(meta);
+	    return new PersistentVector(meta, 7, 5,
+		    PersistentVector.EMPTY_NODE, new Object[] { e0, e1, e2, e3,
+			    e4, e5, val });
 	}
 
 	public ITransientCollection asTransient() {
