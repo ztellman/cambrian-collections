@@ -1,5 +1,6 @@
 (ns cambrian-collections.vector
   (:require
+    [clojure.string :as str]
     [cambrian-collections.java :as j]))
 
 (defn reduce-body [reduce-ops]
@@ -63,16 +64,10 @@
       (j/method '[public] 'ITransientVector 'conj '[Object val]
         "ensureEditable();"
         (j/cond (str "count == " max-cardinality)
-
           (str
-            "ITransientCollection coll = PersistentVector.EMPTY.asTransient();\n"
-            "return (ITransientVector) coll"
-            (apply str
-              (map
-                (fn [f]
-                  (str ".conj(" f ")"))
-                fields))
-            ".conj(val);"))
+            "return new PersistentVector("
+            (inc max-cardinality)
+            ",5,PersistentVector.EMPTY_NODE,new Object[] {" (str/join "," fields) ",val}).asTransient();"))
         (apply j/switch "++count"
           (apply concat
             (map
@@ -165,8 +160,7 @@
                    (if (zero? idx)
                      "return EMPTY;"
                      (str "return new Card" idx "("
-                       (apply str
-                         (interpose "," (take idx fields)))
+                       (str/join "," (take idx fields))
                        ");\n"))])
                 (range (inc max-cardinality))))))
         "throw new IllegalStateException();"))))
@@ -306,10 +300,7 @@
             ";\n")))
 
       (j/method '[public] 'ITransientCollection 'asTransient []
-        (str
-          "return new Transient("
-          (apply str (interpose "," fields))
-          ");"))
+        (str "return new Transient(" (str/join "," fields) ");"))
 
       ;; public IPersistentVector pop()
       (j/method '[public] 'IPersistentVector 'pop []
@@ -383,12 +374,11 @@
           (j/cond
             (str "o instanceof " classname)
             (j/return
-              (apply str
-                (interpose '&&
-                  (map
-                    (fn [f]
-                      (j/invoke 'Util.equals f (str "((" classname ")o)." f)))
-                    fields))))
+              (str/join "&&"
+                (map
+                  (fn [f]
+                    (j/invoke 'Util.equals f (str "((" classname ")o)." f)))
+                  fields)))
             "return super.equals(o);")))
 
       ;; public boolean equiv(Object o)
@@ -398,18 +388,16 @@
           (j/cond
             (str "o instanceof " classname)
             (j/return
-              (apply str
-                (interpose '&&
-                  (map
-                    (fn [f]
-                      (j/invoke 'Util.equiv f (str "((" classname ")o)." f)))
-                    fields))))
+              (str/join "&&"
+                (map
+                  (fn [f]
+                    (j/invoke 'Util.equiv f (str "((" classname ")o)." f)))
+                  fields)))
             "return super.equiv(o);")))
 
       ;; public Object[] toArray()
       (j/method '[public] "Object[]" 'toArray []
-        "return new Object[] {"
-        (apply str (interpose "," fields)) "};")
+        "return new Object[] {" (str/join "," fields) "};")
 
       ;; public Iterator iterator()
       (j/method '[public] 'Iterator 'iterator []
@@ -484,10 +472,7 @@
               (->> fields (take n) (mapcat #(list 'Object %)))
               (if (zero? n)
                 "return EMPTY;"
-                (str
-                  "return new Card" n "("
-                  (apply str (interpose "," (take n fields)))
-                  ");")))))
+                (str "return new Card" n "(" (str/join "," (take n fields)) ");")))))
         (apply str))
 
       (->> (range (inc max-cardinality))

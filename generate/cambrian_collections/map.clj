@@ -1,6 +1,7 @@
 (ns cambrian-collections.map
   (:require
-    [cambrian-collections.java :as j]))
+    [cambrian-collections.java :as j]
+    [clojure.string :as str]))
 
 (defn reduce-body [reduce-ops]
   (apply str
@@ -439,13 +440,12 @@
 
       (j/method '[public] "Object[]" 'toArray []
         "return new Object[] {"
-        (->> (map
-               (fn [k v]
-                 (str "new MapEntry(" k "," v ")"))
-               ks
-               vs)
-          (interpose ",")
-          (apply str))
+        (str/join ","
+          (map
+            (fn [k v]
+              (str "new MapEntry(" k "," v ")"))
+            ks
+            vs))
         "};")
 
       (when (pos? cardinality)
@@ -681,12 +681,11 @@
                 "return EMPTY;"
                 (str
                   "return new Card" n "("
-                  (apply str
-                    (interpose ","
-                      (interleave
-                        (take n ks)
-                        (take n vs)
-                        (map #(j/invoke 'Util.hasheq %) (take n ks)))))
+                  (str/join ","
+                    (interleave
+                      (take n ks)
+                      (take n vs)
+                      (map #(j/invoke 'Util.hasheq %) (take n ks))))
                   ");")))))
         (apply str))
 

@@ -1820,10 +1820,9 @@ public class PersistentUnrolledVector {
 	public ITransientVector conj(Object val) {
 	    ensureEditable();
 	    if (count == 6) {
-		ITransientCollection coll = PersistentVector.EMPTY
+		return new PersistentVector(7, 5, PersistentVector.EMPTY_NODE,
+			new Object[] { e0, e1, e2, e3, e4, e5, val })
 			.asTransient();
-		return (ITransientVector) coll.conj(e0).conj(e1).conj(e2)
-			.conj(e3).conj(e4).conj(e5).conj(val);
 	    }
 	    switch (++count) {
 	    case 1:
