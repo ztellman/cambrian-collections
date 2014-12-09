@@ -811,7 +811,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
@@ -1160,7 +1160,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
@@ -1570,7 +1570,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
@@ -2044,7 +2044,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
@@ -2578,7 +2578,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
@@ -3183,7 +3183,7 @@ public class PersistentUnrolledMap {
 	    }
 
 	    public IChunk chunkedFirst() {
-		return new ArrayChunk(toArray(), offset);
+		return new ArrayChunk(toArray(), 0);
 	    }
 
 	    public ISeq chunkedNext() {
