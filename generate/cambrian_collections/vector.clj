@@ -427,7 +427,7 @@
             "this.meta = meta;")
 
           (j/method '[public] 'IChunk 'chunkedFirst []
-            "return new " (j/invoke 'ArrayChunk "toArray()" 'offset) ";")
+            "return new " (j/invoke 'ArrayChunk "toArray()" 0) ";")
 
           (j/method '[public] 'ISeq 'chunkedNext []
             "return null;")
