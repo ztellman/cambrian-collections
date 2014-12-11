@@ -325,8 +325,6 @@
 
           "o instanceof IPersistentMap"
           (apply str
-            (j/cond "!(o instanceof MapEquivalence)"
-              "return false;")
             "IPersistentMap m = (IPersistentMap) o;"
             (j/cond (str "m.count() != " cardinality)
               "return false;")

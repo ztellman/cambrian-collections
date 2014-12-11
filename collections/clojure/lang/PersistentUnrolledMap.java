@@ -493,9 +493,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 0) {
 		    return false;
@@ -718,9 +715,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 1) {
 		    return false;
@@ -1043,9 +1037,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 2) {
 		    return false;
@@ -1429,9 +1420,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 3) {
 		    return false;
@@ -1880,9 +1868,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 4) {
 		    return false;
@@ -2390,9 +2375,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 5) {
 		    return false;
@@ -2972,9 +2954,6 @@ public class PersistentUnrolledMap {
 
 	public boolean equals(Object o) {
 	    if (o instanceof IPersistentMap) {
-		if (!(o instanceof MapEquivalence)) {
-		    return false;
-		}
 		IPersistentMap m = (IPersistentMap) o;
 		if (m.count() != 6) {
 		    return false;
