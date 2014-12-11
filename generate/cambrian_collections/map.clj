@@ -196,9 +196,9 @@
                      (str "return new "
                        (apply j/invoke classname 'meta
                          (interleave
-                           (assoc ks idx 'key)
+                           ks
                            (assoc vs idx 'val)
-                           (assoc hs idx 'h)))
+                           hs))
                        ";")])
                   (range cardinality))
                 [(if (= cardinality max-cardinality)
@@ -580,25 +580,34 @@
       (j/method '[] 'ITransientMap 'doAssoc '[Object key Object val]
         "int h = Util.hasheq(key);"
         "int idx = indexOf(h, key);"
-        (apply j/switch "idx == -1 ? count++ : idx"
-          (concat
-            (mapcat
-              (fn [idx h k v]
-                [idx (str h "= h;" k "= key;" v "= val; return this;")])
-              (range)
-              hs
-              ks
-              vs)
-            [(str
-               (apply str
-                 "return PersistentHashMap.EMPTY.asTransient()"
-                 (map
-                   (fn [k v]
-                     (str "." (j/invoke 'assoc k v)))
-                   ks
-                   vs))
-               ".assoc(key,val);")])))
-
+        (j/cond "idx == -1"
+          (apply j/switch "count++"
+            (concat
+              (mapcat
+                (fn [idx h k v]
+                  [idx (str h "= h;" k "= key;" v "= val; return this;")])
+                (range)
+                hs
+                ks
+                vs)
+              [(str
+                 (apply str
+                   "return PersistentHashMap.EMPTY.asTransient()"
+                   (map
+                     (fn [k v]
+                       (str "." (j/invoke 'assoc k v)))
+                     ks
+                     vs))
+                 ".assoc(key,val);")]))
+          (apply j/switch 'idx
+            (concat
+              (mapcat
+                (fn [idx v]
+                  [idx (str v "= val; return this;")])
+                (range)
+                vs)
+              ; this should never happen
+              [(j/return 'null)]))))
       (j/method '[] 'Object 'doValAt '[Object key, Object notFound]
         "int h = Util.hasheq(key);"
         "int idx = indexOf(h, key);"
