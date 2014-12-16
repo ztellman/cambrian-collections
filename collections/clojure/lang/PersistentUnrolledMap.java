@@ -662,7 +662,7 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card0();
+		return new Card0(meta);
 	    default:
 		return this;
 	    }
@@ -974,9 +974,9 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card1(k1, v1, h1);
+		return new Card1(meta, k1, v1, h1);
 	    case 1:
-		return new Card1(k0, v0, h0);
+		return new Card1(meta, k0, v0, h0);
 	    default:
 		return this;
 	    }
@@ -1347,11 +1347,11 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card2(k1, v1, h1, k2, v2, h2);
+		return new Card2(meta, k1, v1, h1, k2, v2, h2);
 	    case 1:
-		return new Card2(k0, v0, h0, k2, v2, h2);
+		return new Card2(meta, k0, v0, h0, k2, v2, h2);
 	    case 2:
-		return new Card2(k0, v0, h0, k1, v1, h1);
+		return new Card2(meta, k0, v0, h0, k1, v1, h1);
 	    default:
 		return this;
 	    }
@@ -1785,13 +1785,13 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card3(k1, v1, h1, k2, v2, h2, k3, v3, h3);
+		return new Card3(meta, k1, v1, h1, k2, v2, h2, k3, v3, h3);
 	    case 1:
-		return new Card3(k0, v0, h0, k2, v2, h2, k3, v3, h3);
+		return new Card3(meta, k0, v0, h0, k2, v2, h2, k3, v3, h3);
 	    case 2:
-		return new Card3(k0, v0, h0, k1, v1, h1, k3, v3, h3);
+		return new Card3(meta, k0, v0, h0, k1, v1, h1, k3, v3, h3);
 	    case 3:
-		return new Card3(k0, v0, h0, k1, v1, h1, k2, v2, h2);
+		return new Card3(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2);
 	    default:
 		return this;
 	    }
@@ -2282,15 +2282,20 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card4(k1, v1, h1, k2, v2, h2, k3, v3, h3, k4, v4, h4);
+		return new Card4(meta, k1, v1, h1, k2, v2, h2, k3, v3, h3, k4,
+			v4, h4);
 	    case 1:
-		return new Card4(k0, v0, h0, k2, v2, h2, k3, v3, h3, k4, v4, h4);
+		return new Card4(meta, k0, v0, h0, k2, v2, h2, k3, v3, h3, k4,
+			v4, h4);
 	    case 2:
-		return new Card4(k0, v0, h0, k1, v1, h1, k3, v3, h3, k4, v4, h4);
+		return new Card4(meta, k0, v0, h0, k1, v1, h1, k3, v3, h3, k4,
+			v4, h4);
 	    case 3:
-		return new Card4(k0, v0, h0, k1, v1, h1, k2, v2, h2, k4, v4, h4);
+		return new Card4(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2, k4,
+			v4, h4);
 	    case 4:
-		return new Card4(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3, h3);
+		return new Card4(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2, k3,
+			v3, h3);
 	    default:
 		return this;
 	    }
@@ -2845,23 +2850,23 @@ public class PersistentUnrolledMap {
 	    int idx = indexOf(Util.hasheq(key), key);
 	    switch (idx) {
 	    case 0:
-		return new Card5(k1, v1, h1, k2, v2, h2, k3, v3, h3, k4, v4,
-			h4, k5, v5, h5);
+		return new Card5(meta, k1, v1, h1, k2, v2, h2, k3, v3, h3, k4,
+			v4, h4, k5, v5, h5);
 	    case 1:
-		return new Card5(k0, v0, h0, k2, v2, h2, k3, v3, h3, k4, v4,
-			h4, k5, v5, h5);
+		return new Card5(meta, k0, v0, h0, k2, v2, h2, k3, v3, h3, k4,
+			v4, h4, k5, v5, h5);
 	    case 2:
-		return new Card5(k0, v0, h0, k1, v1, h1, k3, v3, h3, k4, v4,
-			h4, k5, v5, h5);
+		return new Card5(meta, k0, v0, h0, k1, v1, h1, k3, v3, h3, k4,
+			v4, h4, k5, v5, h5);
 	    case 3:
-		return new Card5(k0, v0, h0, k1, v1, h1, k2, v2, h2, k4, v4,
-			h4, k5, v5, h5);
+		return new Card5(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2, k4,
+			v4, h4, k5, v5, h5);
 	    case 4:
-		return new Card5(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3,
-			h3, k5, v5, h5);
+		return new Card5(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2, k3,
+			v3, h3, k5, v5, h5);
 	    case 5:
-		return new Card5(k0, v0, h0, k1, v1, h1, k2, v2, h2, k3, v3,
-			h3, k4, v4, h4);
+		return new Card5(meta, k0, v0, h0, k1, v1, h1, k2, v2, h2, k3,
+			v3, h3, k4, v4, h4);
 	    default:
 		return this;
 	    }

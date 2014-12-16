@@ -234,6 +234,7 @@
                     [idx
                      (str "return new "
                        (apply j/invoke dec-classname
+                         'meta
                          (interleave
                            (concat (subvec ks 0 idx) (subvec ks (inc idx)))
                            (concat (subvec vs 0 idx) (subvec vs (inc idx)))
