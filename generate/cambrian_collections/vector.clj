@@ -32,11 +32,11 @@
       'Transient
 
       (->> fields
-        (map #(j/field nil 'Object %))
+        (map #(j/field '[volatile] 'Object %))
         (apply str))
 
-      "private int count;"
-      "private transient boolean edit = true;"
+      "private volatile int count;"
+      "private transient volatile boolean edit = true;"
 
       (->> (range (inc max-cardinality))
         (map
