@@ -14,6 +14,7 @@
    [org.jibx.config.3rdparty.org.eclipse/org.eclipse.core.resources "3.7.100.v20110510-0712"]
    [org.jibx.config.3rdparty.org.eclipse/org.eclipse.equinox.common "3.6.0.v20110523"]]
   :jvm-opts ["-server" "-Xmx2g"]
+  :prep-tasks ["run" "javac"]
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark}
   :main cambrian-collections.main
