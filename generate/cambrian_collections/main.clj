@@ -1,5 +1,6 @@
 (ns cambrian-collections.main
   (:require
+    [clojure.java.io :refer [make-parents]]
     [cambrian-collections
      [java :as j]
      [vector :as v]
@@ -21,19 +22,23 @@
 
 ")
 
-(defn -main [& args]
+(defn gen-java-file [filename prelude code]
+  (make-parents filename)
   (spit
-    (str "collections/clojure/lang/PersistentUnrolledVector.java")
+    filename
     (j/format-java
       (str
         comments
-        v/class-prelude
-        (v/unrolled-vector 6))))
+        prelude
+        code))))
 
-  (spit
-    (str "collections/clojure/lang/PersistentUnrolledMap.java")
-    (j/format-java
-      (str
-        comments
-        m/class-prelude
-        (m/unrolled-map 6)))))
+(defn -main [& args]
+  (gen-java-file
+    "collections/clojure/lang/PersistentUnrolledVector.java"
+    v/class-prelude
+    (v/unrolled-vector 6))
+
+  (gen-java-file
+    "collections/clojure/lang/PersistentUnrolledMap.java"
+    m/class-prelude
+    (m/unrolled-map 6)))

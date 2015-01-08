@@ -197,9 +197,9 @@
                      (str "return new "
                        (apply j/invoke classname 'meta
                          (interleave
-                           (assoc ks idx 'key)
+                           ks
                            (assoc vs idx 'val)
-                           (assoc hs idx 'h)))
+                           hs))
                        ";")])
                   (range cardinality))
                 [(if (= cardinality max-cardinality)
@@ -235,6 +235,7 @@
                     [idx
                      (str "return new "
                        (apply j/invoke dec-classname
+                         'meta
                          (interleave
                            (concat (subvec ks 0 idx) (subvec ks (inc idx)))
                            (concat (subvec vs 0 idx) (subvec vs (inc idx)))
@@ -326,8 +327,6 @@
 
           "o instanceof IPersistentMap"
           (apply str
-            (j/cond "!(o instanceof MapEquivalence)"
-              "return false;")
             "IPersistentMap m = (IPersistentMap) o;"
             (j/cond (str "m.count() != " cardinality)
               "return false;")
@@ -580,25 +579,34 @@
       (j/method '[] 'ITransientMap 'doAssoc '[Object key Object val]
         "int h = Util.hasheq(key);"
         "int idx = indexOf(h, key);"
-        (apply j/switch "idx == -1 ? count++ : idx"
-          (concat
-            (mapcat
-              (fn [idx h k v]
-                [idx (str h "= h;" k "= key;" v "= val; return this;")])
-              (range)
-              hs
-              ks
-              vs)
-            [(str
-               (apply str
-                 "return PersistentHashMap.EMPTY.asTransient()"
-                 (map
-                   (fn [k v]
-                     (str "." (j/invoke 'assoc k v)))
-                   ks
-                   vs))
-               ".assoc(key,val);")])))
-
+        (j/cond "idx == -1"
+          (apply j/switch "count++"
+            (concat
+              (mapcat
+                (fn [idx h k v]
+                  [idx (str h "= h;" k "= key;" v "= val; return this;")])
+                (range)
+                hs
+                ks
+                vs)
+              [(str
+                 (apply str
+                   "return PersistentHashMap.EMPTY.asTransient()"
+                   (map
+                     (fn [k v]
+                       (str "." (j/invoke 'assoc k v)))
+                     ks
+                     vs))
+                 ".assoc(key,val);")]))
+          (apply j/switch 'idx
+            (concat
+              (mapcat
+                (fn [idx v]
+                  [idx (str v "= val; return this;")])
+                (range)
+                vs)
+              ; this should never happen
+              [(j/return 'null)]))))
       (j/method '[] 'Object 'doValAt '[Object key, Object notFound]
         "int h = Util.hasheq(key);"
         "int idx = indexOf(h, key);"
