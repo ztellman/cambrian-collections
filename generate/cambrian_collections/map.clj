@@ -32,6 +32,30 @@
     (map #(str % ";\n"))
     (apply str)))
 
+(defn iterator [mname cardinality ret-k-v ks vs]
+  (j/method '[public] 'Iterator mname []
+    "return new Iterator() {"
+    "int i = 0;"
+    (j/method '[public] 'boolean 'hasNext []
+      (if (zero? cardinality)
+        "return false;"
+        (str "return i < " cardinality ";")))
+    (j/method '[public] 'Object 'next []
+      (if (zero? cardinality)
+        "throw new IndexOutOfBoundsException();"
+        (apply j/switch "i++"
+          (concat
+            (mapcat
+              (fn [idx k v]
+                [idx (str "return " (ret-k-v k v) ";")])
+              (range)
+              ks
+              vs)
+            ["throw new IndexOutOfBoundsException();"]))))
+    (j/method '[public] 'void 'remove []
+      "throw new UnsupportedOperationException();")
+    "};"))
+
 ;;;
 
 (defn persistent-map [cardinality max-cardinality]
@@ -414,28 +438,26 @@
         "return init;")
 
       ;; public Iterator iterator()
-      (j/method '[public] 'Iterator 'iterator []
-        "return new Iterator() {"
-        "int i = 0;"
-        (j/method '[public] 'boolean 'hasNext []
-          (if (zero? cardinality)
-            "return false;"
-            (str "return i < " cardinality ";")))
-        (j/method '[public] 'Object 'next []
-          (if (zero? cardinality)
-            "throw new IndexOutOfBoundsException();"
-            (apply j/switch "i++"
-              (concat
-                (mapcat
-                  (fn [idx k v]
-                    [idx (str "return new " (j/invoke 'MapEntry k v) ";")])
-                  (range)
-                  ks
-                  vs)
-                ["throw new IndexOutOfBoundsException();"]))))
-        (j/method '[public] 'void 'remove []
-          "throw new UnsupportedOperationException();")
-        "};")
+      (iterator
+        'iterator
+        cardinality
+        (fn [k v]
+          (str "new " (j/invoke 'MapEntry k v)))
+        ks vs)
+
+      ;; public Iterator keyIterator()
+      (iterator
+        'keyIterator
+        cardinality
+        (fn [k v] k)
+        ks vs)
+
+      ;; public Iterator valIterator()
+      (iterator
+        'valIterator
+        cardinality
+        (fn [k v] v)
+        ks vs)
 
       (j/method '[public] "Object[]" 'toArray []
         "return new Object[] {"
