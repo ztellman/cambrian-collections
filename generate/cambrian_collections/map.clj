@@ -663,6 +663,7 @@
         (j/return 'this))
 
       (j/method '[] 'IPersistentMap 'doPersistent '[]
+        "edit = false;"
         (apply j/switch 'count
           (mapcat
             (fn [n]
