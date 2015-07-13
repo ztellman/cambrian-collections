@@ -6,7 +6,7 @@
   :dependencies
   [[collection-check "0.1.5-SNAPSHOT"]
    [criterium "0.4.3"]
-   [org.clojure/clojure "1.6.0"]
+   [org.clojure/clojure "1.7.0"]
    [org.eclipse.tycho/org.eclipse.jdt.core "3.10.0.v20140604-1726"]
    [org.eclipse.core/runtime "3.9.100-v20131218-1515"
     :exclusions [org.eclipse.equinox/app]]
