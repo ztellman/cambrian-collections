@@ -537,16 +537,16 @@
       'Transient
 
       (->> (concat ks vs)
-        (map #(j/field '[private] 'Object %))
+        (map #(j/field '[private volatile] 'Object %))
         (apply str))
 
       (->> hs
-        (map #(j/field '[private] 'int %))
+        (map #(j/field '[private volatile] 'int %))
         (apply str))
 
-      "private int count = 0;"
+      "private volatile int count = 0;"
 
-      "private boolean edit = true;"
+      "private volatile boolean edit = true;"
 
       (->> (range (inc max-cardinality))
         (map
